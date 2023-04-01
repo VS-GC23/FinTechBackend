@@ -29,6 +29,6 @@ const InsuranceSchema = new Schema({
     },
   });
 
-  const Insurance_Fintech = mongoose.model("Insurance_Fintech", InsuranceSchema)
+  const Insurance_Fintech = mongoose.model("Insurance", InsuranceSchema)
 
   module.exports = Insurance_Fintech

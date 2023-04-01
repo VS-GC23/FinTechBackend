@@ -1,8 +1,13 @@
+"use strict";
 const Transactions_Fintech = require("../models/transactions");
 const MutualFunds_Fintech = require("../models/mutualfunds")
 const Investments_Fintech = require("../models/investments")
 const Insurance_Fintech = require("../models/insurance")
-const User = require("../models/user")
+const User = require("../models/user");
+const fetch = require('node-fetch');
+
+const localBankURL = "http://localhost:3001";
+const EC2URL = "http://3.108.235.155:3001"
 
 function createTransactionID(){
   const characterString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -16,8 +21,13 @@ function createTransactionID(){
 
 const initialise_transcations = async (req, res) => {
   try {
-    const body = req.body;
+    const Body = JSON.stringify(req.body);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("Accept", "application/json");
     const userEmail = req.email.Email
+    console.log(userEmail);
     const user = await User.findOne({Email: userEmail});
     // const body = {
     //   sender: {
@@ -33,34 +43,38 @@ const initialise_transcations = async (req, res) => {
     //   paymentAmount: req.body.paymentAmount,
     // };
 
-    const Body = JSON.stringify(body);
-
     const requestOptions = {
       method: "POST",
       body: Body,
+      headers: myHeaders,
       redirect: "follow",
     };
     const response = await fetch(
-      "http://3.108.235.155:3001/payment/initialise-transaction",
+      `${EC2URL}/payment/initialise-transaction`,
       requestOptions
     );
-    if (!response) {
+    console.log(response.status);
+    if (response.status === 501) {
       throw Error("Payment cannot be initialized");
     }
     const payments = new Transactions_Fintech({
-      senderAccountNumber: body.sender.AccountNumber,
-      receiverAccountNumber: body.receiver.AccountNumber,
-      paymentAmount: body.paymentAmount,
-      Description: req.body.Description,
-      Amount: req.body.paymentAmount,
-      TransactionDate: $now(),
       TransactionID: createTransactionID(),
-      UserID: user.UserID
+      UserID: user.UserID,
+      senderAccountNumber: req.body.sender.AccountNumber,
+      senderIFSCCode: req.body.sender.IFSCCode,
+      RecipientAccountNumber: req.body.receiver.AccountNumber,
+      RecipientIFSCCode: req.body.receiver.IFSCCode,
+      Amount: req.body.paymentAmount,
+      TransactionDate: Date.now(),
+      Description: req.body.Description
     });
     const new_payments = await payments.save();
-    res.status(201).json(new_payments);
+    let body = (await response.json()).body;
+    console.log(body);
+    res.status(201).json({message: response.message});
   } catch (err) {
     console.log(err);
+    res.status(501).json({message : err.message})
   }
 };
 
@@ -70,10 +84,12 @@ const get_transaction_history = async (req, res) => {
     const user = await User.findOne({Email: userEmail});
     const history = await Transactions_Fintech.findOne({UserID: user.UserID,});
     console.log(history);
-    if (account == null) {
+    if (!user) {
       res.status(404).json({ message: "Cannot find User" });
     }
-    res.json(history);
+    else{
+      res.json(history);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -85,10 +101,12 @@ const get_investments_history = async (req, res) => {
     const user = await User.findOne({Email: userEmail});
     const history = await Investments_Fintech.findOne({UserID: user.UserID,});
     console.log(history);
-    if (account == null) {
+    if (!user) {
       res.status(404).json({ message: "Cannot find User" });
     }
-    res.json(history);
+    else{
+      res.json(history);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -100,10 +118,12 @@ const get_mutualfunds_history = async (req, res) => {
     const user = await User.findOne({Email: userEmail});
     const history = await MutualFunds_Fintech.findOne({UserID: user.UserID,});
     console.log(history);
-    if (account == null) {
+    if (!user) {
       res.status(404).json({ message: "Cannot find User" });
     }
-    res.json(history);
+    else{
+      res.json(history);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -113,12 +133,14 @@ const get_insurance_history = async (req, res) => {
   try {
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
-    const history = await Insurance_Fintech.findOne({UserID: user.UserID,});
+    const history = await Insurance_Fintech.findOne({UserID: user.UserID});
     console.log(history);
-    if (account == null) {
+    if (!user) {
       res.status(404).json({ message: "Cannot find User" });
     }
-    res.json(history);
+    else{
+      res.json(history);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -126,21 +148,26 @@ const get_insurance_history = async (req, res) => {
 
 const initialise_investments = async (req, res) => {
   try {
-    const body = req.body;
-    const Body = JSON.stringify(body);
+    const Body = JSON.stringify(req.body);
+    console.log(req.body);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("Accept", "application/json");
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
 
     const requestOptions = {
       method: "POST",
       body: Body,
-      redirect: "follow",
+      headers: myHeaders,
+      redirect: "follow"
     };
     const response = await fetch(
-      "http://3.108.235.155:3001/payment/initialise-investment",
+      `${EC2URL}/payment/initialise-investment`,
       requestOptions
     );
-    if (!response) {
+    if (response.status === 501) {
       throw Error("Payment cannot be initialized");
     }
     const Investments = new Investments_Fintech({
@@ -155,27 +182,31 @@ const initialise_investments = async (req, res) => {
     const new_investments = await Investments.save();
     res.status(201).json(new_investments);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(501).json({ message: err.message });
   }
 };
 
 const initialise_mutualfunds = async (req, res) => {
   try {
-    const body = req.body;
-    const Body = JSON.stringify(body);
+    const Body = JSON.stringify(req.body);
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("Accept", "application/json");
 
     const requestOptions = {
       method: "POST",
       body: Body,
+      headers: myHeaders,
       redirect: "follow",
     };
     const response = await fetch(
-      "http://3.108.235.155:3001/payment/initialise-mutual-fund",
+      `${EC2URL}/payment/initialise-mutual-fund`,
       requestOptions
     );
-    if (!response) {
+    if (response.status === 501) {
       throw Error("Payment cannot be initialized");
     }
     const mutualfunds = new MutualFunds_Fintech({
@@ -188,29 +219,35 @@ const initialise_mutualfunds = async (req, res) => {
       UserID: user.UserID
     });
     const new_mutualfunds = await mutualfunds.save();
-    res.status(201).json(new_mutualfunds);
+    res.status(201).json(response);
   } catch (err) {
     console.log(err);
+    res.status(501).json({ message: err.message });
   }
 };
 
 const initialise_insurance = async (req, res) => {
   try {
-    const body = req.body;
-    const Body = JSON.stringify(body);
+    const Body = JSON.stringify(req.body);
+    console.log(req.body);
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("Accept", "application/json");
 
     const requestOptions = {
       method: "POST",
       body: Body,
+      headers: myHeaders,
       redirect: "follow",
     };
     const response = await fetch(
-      "http://3.108.235.155:3001/payment/initialise-insurance",
+      `${EC2URL}/payment/initialise-insurance`,
       requestOptions
     );
-    if (!response) {
+    if (response.status === 501) {
       throw Error("Payment cannot be initialized");
     }
     const insurance = new Insurance_Fintech({
@@ -225,6 +262,7 @@ const initialise_insurance = async (req, res) => {
     res.status(201).json(new_insurance);
   } catch (err) {
     console.log(err);
+    res.status(501).json({ message: err.message });
   }
 };
 module.exports = {

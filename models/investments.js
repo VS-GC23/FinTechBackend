@@ -33,6 +33,6 @@ const InvestmentSchema = new Schema({
     }
   });
 
-  const Investments_Fintech = mongoose.model("Investments_Fintech", InvestmentSchema)
+  const Investments_Fintech = mongoose.model("Investment", InvestmentSchema)
 
   module.exports = Investments_Fintech

@@ -40,6 +40,6 @@ const TransactionsSchema = new Schema({
   }
 });
 
-const Transactions_Fintech = mongoose.model("Transactions_Fintech", TransactionsSchema);
+const Transactions_Fintech = mongoose.model("Transaction", TransactionsSchema);
 
 module.exports = Transactions_Fintech
