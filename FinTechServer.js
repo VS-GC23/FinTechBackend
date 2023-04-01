@@ -10,6 +10,8 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const dbURI = process.env.MONGODB_URI;
 
