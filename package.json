@@ -4,8 +4,8 @@
   "description": "",
   "main": "FinTechServer.js",
   "scripts": {
+    "start": "node FinTechServer.js",
     "dev": "nodemon FinTechServer.js",
-    "start": "nodemon FinTechServer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.6.9"
   }
 }

@@ -33,6 +33,6 @@ const MutualFundsSchema = new Schema({
     },
   });
   
-  const MutualFunds_Fintech = mongoose.model("MutualFunds_Fintech", MutualFundsSchema)
+  const MutualFunds_Fintech = mongoose.model("MutualFund", MutualFundsSchema)
 
   module.exports = MutualFunds_Fintech

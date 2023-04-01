@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const user_routes = require("./routes/userRoutes");
-// const transaction_routes = require("./routes/transactionRoutes");
+const payment_routes = require("./routes/paymentsRoutes");
 
 const path = require("path");
 
@@ -27,6 +27,7 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 app.use("/user", user_routes);
+app.use("/payments", payment_routes);
 
 //CSV reader part
 const csvRoutes = require("./routes/dataservicesRoutes");
