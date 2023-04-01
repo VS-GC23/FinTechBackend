@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const csv = require('fast-csv');
-const History = require("../Models/History");
+const History = require("../models/History");
 
 const create = async (req, res) => {
   console.log(req.file);

@@ -36,13 +36,13 @@ const upload = multer({
 });
 
 const router = express.Router();
-
+console.log(csvController.create);
 //post create new media
 router.post(
   "/add-bankstatement",
   upload.single('csvFile'),
-  csvController.create
+  csvController
 );
-router.get("/get-bankstatement", dataservicesController.data);
+router.get("/get-bankstatement", dataservicesController);
 
 module.exports = router;

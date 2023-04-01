@@ -4,7 +4,8 @@
   "description": "",
   "main": "FinTechServer.js",
   "scripts": {
-    "start": "nodemon FinTechServer.js",
+    "dev": "nodemon FinTechServer.js",
+    "start": "node FinTechServer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
