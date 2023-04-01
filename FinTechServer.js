@@ -3,9 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const user_routes = require("./routes/userRoutes");
-// const transaction_routes = require("./routes/transactionRoutes");
+const payment_routes = require("./routes/paymentsRoutes");
+
+const path = require("path");
+
 
 const app = express();
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const dbURI = process.env.MONGODB_URI;
 
@@ -19,6 +25,12 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
     console.log(err);
 })
 
-app.use(cors());
 
 app.use("/user", user_routes);
+app.use("/payments", payment_routes);
+
+//CSV reader part
+const csvRoutes = require("./routes/dataservicesRoutes");
+
+app.use("/uploadCsv", csvRoutes);
+app.use("/public", express.static(path.join(__dirname, "public")));
