@@ -3,16 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const user_routes = require("./routes/userRoutes");
-<<<<<<< HEAD
 // const transaction_routes = require("./routes/transactionRoutes");
 
 const path = require("path");
 
-=======
->>>>>>> 8bedaa03e043eedb9eba6202a563dffc882c97c3
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const dbURI = process.env.MONGODB_URI;
 

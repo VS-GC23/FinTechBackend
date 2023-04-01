@@ -1,0 +1,8 @@
+date,time,type,description,debit,credit,balance
+01-01-2022,12:05,Opening,Opening Balance,0,0,5000
+05-01-2022,12:05,Investment,Deposit,0,2000,7000
+10-01-2022,13:14,Transaction,Withdrawal,500,0,6500
+15-01-2022,12:05,Transaction,Transfer to John Smith,1000,0,5500
+20-01-2022,12:05,Return,Interest earned,0,50,5550
+25-01-2022,12:05,Transaction,ATM withdrawal,200,0,5350
+31-01-2022,12:05,Transaction,Monthly maintenance fee,10,0,5340
