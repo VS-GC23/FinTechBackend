@@ -82,7 +82,7 @@ const get_transaction_history = async (req, res) => {
   try {
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
-    const history = await Transactions_Fintech.findOne({UserID: user.UserID,});
+    const history = await Transactions_Fintech.find({UserID: user.UserID,});
     console.log(history);
     if (!user) {
       res.status(404).json({ message: "Cannot find User" });
@@ -99,7 +99,7 @@ const get_investments_history = async (req, res) => {
   try {
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
-    const history = await Investments_Fintech.findOne({UserID: user.UserID,});
+    const history = await Investments_Fintech.find({UserID: user.UserID,});
     console.log(history);
     if (!user) {
       res.status(404).json({ message: "Cannot find User" });
@@ -116,7 +116,7 @@ const get_mutualfunds_history = async (req, res) => {
   try {
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
-    const history = await MutualFunds_Fintech.findOne({UserID: user.UserID,});
+    const history = await MutualFunds_Fintech.find({UserID: user.UserID,});
     console.log(history);
     if (!user) {
       res.status(404).json({ message: "Cannot find User" });
@@ -133,7 +133,7 @@ const get_insurance_history = async (req, res) => {
   try {
     const userEmail = req.email.Email
     const user = await User.findOne({Email: userEmail});
-    const history = await Insurance_Fintech.findOne({UserID: user.UserID});
+    const history = await Insurance_Fintech.find({UserID: user.UserID});
     console.log(history);
     if (!user) {
       res.status(404).json({ message: "Cannot find User" });
