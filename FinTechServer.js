@@ -10,6 +10,8 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const dbURI = process.env.MONGODB_URI;
 
@@ -28,7 +30,7 @@ app.use("/user", user_routes);
 app.use("/payments", payment_routes);
 
 //CSV reader part
-const csvRoutes = require("./routes/csvRoutes");
+const csvRoutes = require("./routes/dataservicesRoutes");
 
 app.use("/uploadCsv", csvRoutes);
 app.use("/public", express.static(path.join(__dirname, "public")));
