@@ -2,7 +2,6 @@ const User = require("../models/user");
 const Account = require("../models/account");
 const Aadhar = require("../models/aadhar");
 const jwt = require("jsonwebtoken");
-// const Aadhar = require("../models/aadhar");
 
 function createUserID(length){
     const characterString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -76,7 +75,6 @@ const sign_up = async (req, res)=>{
                 Email : req.body.Email,
                 Address : req.body.Address,
                 ContactNumber : req.body.ContactNumber,
-                // AccountNumber : AccountNumberCheck ? [AccountNumber] : [],
                 AadharNumber : req.body.AadharNumber,
                 Password : req.body.Password,
             }
@@ -107,7 +105,7 @@ const sign_in = async (req, res)=>{
     
         if(userCheck){
             const accessToken = jwt.sign({Email : user.Email}, process.env.ACCESS_TOKEN_SECRET);
-            res.json({accessToken : accessToken});
+            res.status(200).json({accessToken : accessToken});
         }
         else{
             throw Error("Invalid Login! Please check your email and password!");
