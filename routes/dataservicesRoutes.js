@@ -1,4 +1,5 @@
 const express = require("express");
+const dataservicesController = require("../controllers/dataservicesController");
 const csvController = require("../controllers/csvController");
 const multer = require("multer");
 const fs = require("fs");
@@ -38,9 +39,10 @@ const router = express.Router();
 
 //post create new media
 router.post(
-  "/create",
+  "/add-bankstatement",
   upload.single('csvFile'),
   csvController.create
 );
+router.get("/get-bankstatement", dataservicesController.data);
 
 module.exports = router;

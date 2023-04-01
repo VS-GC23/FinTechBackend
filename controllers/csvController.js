@@ -3,7 +3,7 @@ const path = require('path');
 const csv = require('fast-csv');
 const History = require("../Models/History");
 
-exports.create = async (req, res) => {
+const create = async (req, res) => {
   console.log(req.file);
   const totalRecords = [];
 try{
@@ -26,3 +26,5 @@ console.log(path.join(__dirname, '../', '/public/csv/' + req.file.filename))
     res.status(400).json(error)
   }
 };
+
+module.exports = create

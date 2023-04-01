@@ -16,7 +16,6 @@ const historySchema = new mongoose.Schema(
     },
     debit: {
       type: Number,
-
     },
     credit: {
       type: Number,
@@ -27,4 +26,5 @@ const historySchema = new mongoose.Schema(
   }
 );
 
-module.exports = History = mongoose.model("History", historySchema);
+const History = mongoose.model("History", historySchema);
+module.exports = History
