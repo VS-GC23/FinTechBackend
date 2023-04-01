@@ -28,6 +28,8 @@ app.use("/user", user_routes);
 
 //CSV reader part
 const csvRoutes = require("./routes/csvRoutes");
+const dataRoutes = require("./routes/dataservicesRoutes")
 
 app.use("/uploadCsv", csvRoutes);
 app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/bankstatements", dataRoutes);
